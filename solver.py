@@ -39,6 +39,7 @@ def prompt():
         elif i == 'cls': clear()
         elif i == 'test': test()
         elif i == 'solve':
+            print('example form: p^q-->~q')
             s = input('solve> ')
             solve(s)
         else: print('invalid command')
@@ -113,7 +114,6 @@ def addParen(s):
 
     if IFF in temp:
         x = temp.split(IFF)
-        print('x = ', x)
         iff = True
 
     if len(x) == 2:
