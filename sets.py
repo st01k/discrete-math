@@ -58,7 +58,7 @@ def prompt():
         elif i == 'help': help()
         elif i == 'cls': clear()
         elif i == 'test': test()
-        elif i == 'solve':
+        elif i == 'eval':
             sets = dialog()
             printResult(sets)
         else: print('invalid command')
@@ -75,38 +75,31 @@ def printResult(sets):
     alpha = string.ascii_uppercase
     for i, st in enumerate(sets):
         iden = alpha[i]
-        #print('Set  ' + iden + ': { ' + str(st).strip('[]') + ' }')
-        print(buildSet('Set' + iden, st))
+        print(formatSet('Set ' + iden, st))
         st.sort()
-        print(buildSet('Sorted', st))
-        #print('Sorted: { ' + str(st).strip('[]') + ' }')
+        print(formatSet('Sorted', st))
         print()
 
     A, B = sets[0], sets[1]
-    u = union(A, B)
-    i = intersection(A, B)
-    c = complement(A)
-    d = difference(A, B)
-    print(buildSet('Union', u))
-    print(buildSet('Isect', i))
-    print(buildSet('NOT A', c))
-    print(buildSet('A - B', d))
-    #print('Union : { ' + str(u).strip('[]') + ' }\n')
-    # print('Isect : { ' + str(i).strip('[]') + ' }\n')
-    # print('NOT A : { ' + str(c).strip('[]') + ' }\n')
-    # print('A - B : { ' + str(d).strip('[]') + ' }\n')
+    print(formatSet('A U B', union(A, B)))
+    print(formatSet('A ∩ B', intersection(A, B)))
+    print(formatSet('NOT A', complement(A)))
+    print(formatSet('A - B', difference(A, B)))
 
-def buildSet(label, set):
+def formatSet(label, set):
     temp = label + ':\n'
     for i, item in enumerate(set):
-        if i % 10 == 0 and i > 0: temp += '\n'
+        if i % 10 == 0: temp += '\n'
         temp += '{:>5}'.format(str(item))
+    if len(set) == 0: temp += '\n\t\tEmpty Set'
+    temp += '\n'
     return temp
 
 # runs test statement
 def test():
-    card, limit = 5, 10
-    sets = genSets(card, limit)
+    #card, limit = 5, 10
+    card, limit = 100, 200
+    sets = genSets(card, limit + 1)
     printResult(sets)
     return
 
@@ -114,11 +107,11 @@ def test():
 def help():
     print('Available Commands')
     print('-------------------------------------------')
-    print('help  - prints this list')
-    print('cls   - clears console screen')
-    print('test  - test run on assignment requirements')
-    print('solve - enters set input mode')
-    print('quit  - exits program')
+    print('help - prints this list')
+    print('cls  - clears console screen')
+    print('test - test on assignment requirements')
+    print('eval - enters set input mode')
+    print('quit - exits program')
 
 # clears screen
 def clear(): print('\n' * 70)
