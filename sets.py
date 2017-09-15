@@ -1,16 +1,15 @@
 import random
-import string
 
 # Casey
 
 maxDomain = 0
 def genSets(k, pop):
     global maxDomain
-    maxDomain = pop
+    maxDomain = pop + 1
     sets = []
     numSets = 2
     for i in range(numSets):
-        sets.append(random.sample(range(pop), k))
+        sets.append(random.sample(range(maxDomain), k))
     return sets
 
 def complement(set):
@@ -59,20 +58,23 @@ def prompt():
         elif i == 'cls': clear()
         elif i == 'test': test()
         elif i == 'eval':
-            sets = dialog()
+            k = input('enter cardinality> ')
+            if not k.isdigit() or int(k) < 0:
+                print('\ninvalid input\n')
+                continue
+            pop = input('enter max inclusive domain value> ')
+            print('domain: (0 - '+ pop +')')
+            if not pop.isdigit() or int(pop) < int(k):
+                print('\ninvalid input\n')
+                continue
+            sets = genSets(int(k), int(pop))
+            print()
             printResult(sets)
         else: print('invalid command')
         print()
 
-def dialog():
-    k = input('enter cardinality> ')
-    pop = input('enter max value> ')
-    print()
-    return genSets(int(k), int(pop))
-
-
 def printResult(sets):
-    alpha = string.ascii_uppercase
+    alpha = ['A', 'B']
     for i, st in enumerate(sets):
         iden = alpha[i]
         print(formatSet('Set ' + iden, st))
@@ -99,7 +101,7 @@ def formatSet(label, set):
 def test():
     #card, limit = 5, 10
     card, limit = 100, 200
-    sets = genSets(card, limit + 1)
+    sets = genSets(card, limit)
     printResult(sets)
     return
 
@@ -111,6 +113,7 @@ def help():
     print('cls  - clears console screen')
     print('test - test on assignment requirements')
     print('eval - enters set input mode')
+    print('       enter 5 and 10 for an easy read test')
     print('quit - exits program')
 
 # clears screen
