@@ -114,7 +114,7 @@ def eval():
     k = input('enter cardinality> ')
     # ensure cardinality is greater than 0
     if not k.isdigit() or int(k) < 0:
-        print('\ninvalid input\n')
+        print('\ninvalid input')
         return
     pop = input('enter max inclusive domain value> ')
     print('domain: (0 - '+ pop +')')
