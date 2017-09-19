@@ -33,7 +33,6 @@ def complement(A):
     # create universal set
     U = list(range(maxDomain))
     for element in A:
-        # remove elements of A from universal set
         if element in U: U.remove(element)
     return U
 
@@ -45,7 +44,6 @@ def complement(A):
 def difference(A, B):
     diff = []
     for element in A:
-        # adds elements of A that are not in B
         if element not in B: diff.append(element)
     return diff
 
@@ -56,10 +54,8 @@ def difference(A, B):
 # returns the union of A and B as a set
 def union(A, B):
     union = []
-    # adds all elements of A into union set
     for element in A: union.append(element)
     for element in B:
-        # adds element of B if not already in union set
         if element not in union: union.append(element)
     union.sort()
     return union
@@ -72,7 +68,6 @@ def union(A, B):
 def intersection(A, B):
     intersection = []
     for element in A:
-        # adds element if it is in both A and B
         if element in B: intersection.append(element)
     intersection.sort()
     return intersection
@@ -123,8 +118,7 @@ def eval():
         return
     pop = input('enter max inclusive domain value> ')
     print('domain: (0 - '+ pop +')')
-    # ensure max domain is less than cardinality
-    # add one for inclusion
+    # ensure max inclusive domain is less than cardinality
     if not pop.isdigit() or int(pop) + 1 < int(k):
         print('\ninvalid input\n')
         return
@@ -151,7 +145,6 @@ def clear(): print('\n' * 70)
 # sets - array of 2 sets
 def printResult(sets):
     alpha = ['A', 'B']
-    # prints set and sorted set for A and B
     for i, st in enumerate(sets):
         iden = alpha[i]
         print(formatSet('Set ' + iden, st))
@@ -172,11 +165,8 @@ def printResult(sets):
 def formatSet(label, set):
     temp = label + ':\n'
     for i, item in enumerate(set):
-        # add new line every 10 elements
         if i % 10 == 0: temp += '\n'
-        # align elements with padding
         temp += '{:>5}'.format(str(item))
-    # checks for empty set
     if len(set) == 0: temp += '\n\t\tEmpty Set'
     temp += '\n'
     return temp
