@@ -62,18 +62,23 @@ def formatSet(label, set):
     return temp
 
 def main():
-    upLim = 200
-    card = 100
-    x = irand(card, upLim)
-    print(formatSet("unsorted", x))
-    isort(x)
-    print(formatSet("sorted", x))
-    # picks a random number within range to search for
-    target = random.randrange(upLim)
-    # plus one adjustment for 0 based array index
-    result = binsearch(x, target) + 1
-    # print result
-    if result == 0: print('number not found')
-    else: print(str(target) + ' found at position ' + str(result))
+    print('\nBinary Search')
+    print('Press enter to continue or q to quit')
+    quit = input()
+    while(quit != 'q'):
+        upLim = 200
+        card = 100
+        x = irand(card, upLim)
+        print(formatSet("Unsorted", x))
+        isort(x)
+        print(formatSet("Sorted", x))
+        # picks a random number within range to search for
+        target = random.randrange(upLim)
+        # plus one adjustment for 0 based array index
+        result = binsearch(x, target) + 1
+        # print result
+        if result == 0: print('Number not found')
+        else: print(str(target) + ' found at position ' + str(result))
+        quit = input()
 
 main()
