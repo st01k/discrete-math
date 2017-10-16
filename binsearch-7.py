@@ -1,7 +1,7 @@
 # Casey Murphy
-# Group 5, Project 6
+# Group 5, Project 7
 # Discrete Mathematics
-# 4 Oct 17
+# 16 Oct 17
 
 import random
 
@@ -14,18 +14,32 @@ def irand(k, top):
 # st - a set of integers
 # insertion sorts set into ascending order
 def isort(st):
-    # steps through set
     for i in range(1, len(st)):
         currVal = st[i]
         pos = i
-        # checks if left value (pos - 1) is greater than current
-        # value (pos) until left value is no longer larger
         while pos > 0 and st[pos - 1] > currVal:
-            # performs insertion
             st[pos] = st[pos - 1]
             pos = pos - 1
-        # resets to current value in outer loop
         st[pos] = currVal
+
+# st - a sorted set
+# tgt - target to search for
+# performs a binary search of sorted set
+# returns position of match
+def binsearch(st, tgt):
+    min = 0
+    max = len(st) - 1
+    cnt = 0
+    print('searching for ' + str(tgt) + '...')
+    while min <= max:
+        cnt += 1
+        p = (min + max) // 2
+        if st[p] == tgt:
+            print('search took ' + str(cnt) + ' guesses')
+            return p
+        elif st[p] > tgt: max = p - 1
+        else: min = p + 1
+    return -1
 
 # label - name of set
 # set - set to format
@@ -33,17 +47,20 @@ def isort(st):
 def formatSet(label, set):
     temp = '\n' + label + ':\n'
     for i, item in enumerate(set):
-        # new line every 10 elements
         if i % 10 == 0: temp += '\n'
-        # aligns and pads element
         temp += '{:>5}'.format(str(item))
     temp += '\n'
     return temp
 
 def main():
-    x = irand(100, 200)
-    print(formatSet("Unsorted", x))
+    upLim = 200
+    x = irand(100, upLim)
+    print(formatSet("unsorted", x))
     isort(x)
-    print(formatSet("Sorted", x))
+    print(formatSet("sorted", x))
+    target = random.randrange(upLim)
+    result = binsearch(x, target) + 1
+    if result == 0: print('number not found')
+    else: print(str(target) + ' found at position ' + str(result))
 
 main()
