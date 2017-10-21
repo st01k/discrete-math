@@ -11,42 +11,49 @@ import random
 def iRand(k, top):
     return random.sample(range(top + 1), k)
 
-# st - a set of integers
+# a - a set of integers
 # sorts set into ascending order by insertion
-def iSort(st):
-    for i in range(1, len(st)):
-        currVal = st[i]
+def iSort(a):
+    for i in range(1, len(a)):
+        currVal = a[i]
         pos = i
-        while pos > 0 and st[pos - 1] > currVal:
-            st[pos] = st[pos - 1]
+        while pos > 0 and a[pos - 1] > currVal:
+            a[pos] = a[pos - 1]
             pos = pos - 1
-        st[pos] = currVal
+        a[pos] = currVal
 
-# st - sorted set
+# a - sorted set
 # tgt - target to search for
 # performs a binary search of a sorted set
 # returns position of match or -1 if not found
-def binSearch(st, tgt):
+def binSearch(a, tgt):
     min, cnt = 0, 0
-    max = len(st) - 1
+    max = len(a) - 1
     while min <= max:
         p = (min + max) // 2
-        if st[p] == tgt: return p
-        elif st[p] > tgt: max = p - 1
+        if a[p] == tgt: return p
+        elif a[p] > tgt: max = p - 1
         else: min = p + 1
     return -1
 
-# x,y - sorted sets
-# returns the symmetric difference of x and y
-# (X U Y) - (X int Y)
-def symDiff(x,y):
+# a,b - sorted sets
+# returns the symmetric difference of a and b
+# A XOR B = (A U B) - (A ∩ B)
+def symDiff(a,b):
     result = list()
-    for elx in x:
-        if binSearch(y, elx) == -1:
-            result.append(elx)
-    for ely in y:
-        if binSearch(x, ely) == -1:
-            result.append(ely)
+    # iterate through set A
+    for ela in a:
+        # search set B for element ela
+        if binSearch(b, ela) == -1:
+            # add element ela to result if not found
+            result.append(ela)
+    # iterate through set B
+    for elb in b:
+        # search set A for element elb
+        if binSearch(a, elb) == -1:
+            # add element elb to result if not found
+            result.append(elb)
+    # return symmetric difference of sets A and B
     return result
 
 
@@ -63,10 +70,9 @@ def formatSet(label, set):
     return temp
 
 def main():
-    upLim = 200
-    card = 100
-    a = iRand(card, upLim)
-    b = iRand(card, upLim)
+    lim, card = 200, 100
+    a = iRand(card, lim)
+    b = iRand(card, lim)
     print(formatSet('A Unsorted', a))
     print(formatSet('B Unsorted', b))
     iSort(a)
@@ -76,6 +82,4 @@ def main():
     x = symDiff(a,b)
     iSort(x)
     print(formatSet('A XOR B', x))
-    #l=[[ x for x in range(5) ] for y in range(4)]
-    #myList=[i*i for i in range(10)]
 main()
