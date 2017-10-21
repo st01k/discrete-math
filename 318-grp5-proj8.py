@@ -40,8 +40,10 @@ def binSearch(A, tgt):
 def symDiff(A, B):
     result = []
     for val in A:
+        # search set B for val, add val to result if not found
         if binSearch(B, val) == -1: result.append(val)
     for val in B:
+        # search set A for val, add val to result if not found
         if binSearch(A, val) == -1: result.append(val)
     return result
 
@@ -59,8 +61,7 @@ def formatSet(label, set):
     return temp
 
 def main():
-    #lim, card = 200, 100
-    lim, card = 10, 5
+    lim, card = 200, 100
     a = iRand(card, lim)
     b = iRand(card, lim)
     print(formatSet('A Unsorted', a))
