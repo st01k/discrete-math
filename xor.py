@@ -2,12 +2,12 @@
 # Group 5, Project 8
 # Discrete Mathematics
 # 20 Oct 17
-import random
 
 # k - number of items in the set
 # top - upper limit for number generation
 # returns a ranged set of randomized integers with top inclusive
 def iRand(k, top):
+    import random
     return random.sample(range(top + 1), k)
 
 # A - a set of integers
