@@ -1,7 +1,7 @@
 # Casey Murphy
-# Group 5, Project 9
+# Group 5, Project 11
 # Discrete Mathematics
-# 31 Oct 17
+# 1 Nov 17
 
 # returns greatest common divisor of a and b
 # a, b - terms to calculate on
@@ -33,35 +33,64 @@ def choosee(l):
 
 # finds modular inverse of e with respect
 # to the totient
+# x = modinv(b) mod n, (x * b) % n == 1
 def modinv(b, n):
     g, x, _ = egcd(b, n)
-    if g == 1:
-        return x % n
+    if g == 1: return x % n
 
-# recursive extended euclidean algorithm
+# extended euclidean algorithm (recursive)
+# take positive integers a, b as input, and
+# return a tuple (g, x, y), such that
+# ax + by = g = gcd(a, b)
 def egcd(a, b):
+    # base case
     if a == 0: return (b, 0, 1)
     else:
         g, x, y = egcd(b % a, a)
         return (g, y - (b // a) * x, x)
 
-def main():
+def toAscii(plaintext):
+    temp = ''
+    for c in plaintext:
+        n = ord(c)
+        if n < 100: temp += '0'
+        temp += str(n)
+    return int(temp)
+
+def fromAscii(ciphertext):
+    return
+
+def genKeys():
     p, q = 10174093, 10176827
     n = p * q
     l = (p - 1) * (q - 1)
     e = choosee(l)
     d = modinv(e, l)
-    
-    print(str(d))
 
     s = '\np = ' + str(p) + '\n'
     s += 'q = ' + str(q) + '\n'
     s += 'n = p * q = ' + str(n) + '\n'
     s += 'l = (p - 1)(q - 1) = ' + str(l) + '\n'
     s += 'e = ' + str(e) + '\n'
-    s += 'gcd(' + str(l) + ', ' + str(e) + ') = ' + str(gcd(l, e))
-
+    s += 'd = ' + str(d) + '\n'
+    s += 'd * e (mod l) = ' + str((d * e) % l) + '\n'
     print(s)
-    return
+
+    return (n, e, d)
+
+def encrypt(m, e, n):
+    return pow(m, e, n)
+
+def decrypt(c, d, n):
+    return pow(c, d, n)
+
+def main():
+    m = toAscii('Math')
+    n, e, d = genKeys()
+    c = encrypt(m, e, n)
+    p = decrypt(c, d, n)
+    print(str(m))
+    print(str(c))
+    print(str(p))
 
 main()

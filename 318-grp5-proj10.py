@@ -45,6 +45,5 @@ def main():
     s += 'gcd(' + str(l) + ', ' + str(e) + ') = ' + str(gcd(l, e))
 
     print(s)
-    return
 
 main()
