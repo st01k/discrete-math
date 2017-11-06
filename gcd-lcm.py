@@ -39,7 +39,8 @@ def lcmList(items):
     return a
 
 def main():
-    data = [9720, 4158, 594, 612]
+    #data = [9720, 4158, 594, 612]
+    data = [16,120,792]
     print('\nGCD and LCM of 2+ numbers\n')
     print('Data Set: ' + ', '.join(str(d) for d in data))
     print('GCD: ' + str(gcdList(data)))
