@@ -60,20 +60,17 @@ def egcd(a, b):
         # by reducing the problem each time in terms
         # of the remainder b / a or b mod a
         g, x, y = egcd(b % a, a)
-        print('in: ' + str(a) + ' ' + str(b) + ' | out: ' + str(g) + ' ' + str(x) + ' ' + str(y))
         # general case
         return (g, y - (b // a) * x, x)
 
 def main():
-    #p, q = 10174093, 10176827
-    p, q = 56,15
+    p, q = 10174093, 10176827
     n = p * q
     l = (p - 1) * (q - 1)
     e, d = 0, 0
     while (d == 0):
         e = choosee(l)
-        #d = modinv(e, l)
-        d = modinv(p,q)
+        d = modinv(e, l)
 
     s = '\np = ' + str(p) + '\n'
     s += 'q = ' + str(q) + '\n'
