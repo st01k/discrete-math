@@ -15,9 +15,8 @@ def gcd(a, b):
 def coprime(l, x):
     return gcd(l, x) == 1
 
-# returns a value that is coprime with l
-# and within the range of 1 - l
-# calls coprime
+# returns encryption key,
+# a value that is coprime with l and within 1 - l
 # l - totient of RSA modulus
 def choosee(l):
     srl = int(l ** (1/2))
@@ -27,23 +26,31 @@ def choosee(l):
         if high < l and coprime(l, high): return high
     return 0
 
-# finds modular inverse of e with respect
-# to the totient
-# x = modinv(b) mod n, (x * b) % n == 1
+# returns d (decryption key) | e(d) ≡ 1 mod l
+# finds modular inverse of e with respect to the totient (l)
+# a(x) [from Bezout's Identity] = e(d) ≡ 1 mod l
+# (e * d) mod l = 1
 def modinv(b, n):
     g, x, _ = egcd(b, n)
     if g == 1: return x % n
 
 # extended euclidean algorithm (recursive)
-# take positive integers a, b as input, and
-# return a tuple (g, x, y), such that
-# ax + by = g = gcd(a, b)
+# essentially, euclid's algorithm backwards
+# a, b - positive integers
+# returns a tuple (g, x, y)
+# g - gcd(a, b)
+# x, y - Bezout's coefficients
+# such that ax + by = g (Bezout's Identity)
 def egcd(a, b):
     if a == 0: return (b, 0, 1)
     else:
         g, x, y = egcd(b % a, a)
         return (g, y - (b // a) * x, x)
 
+# takes a plaintext string and encodes it
+# into non-breaking (no spaces) ascii
+# returns ascii code of plaintext
+# plaintext - plain message
 def toAscii(plaintext):
     temp = ''
     for c in plaintext:
@@ -52,43 +59,57 @@ def toAscii(plaintext):
         temp += str(n)
     return int(temp)
 
+# takes an ascii string and decodes it
+# into a plaintext message
+# returns plain text message
+# asciicode - collection of ascii codes
 def toText(asciicode):
-    asciiAry = format(asciicode, ',').split(',')
-    m = ''
+    m, asciiAry = '', format(asciicode, ',').split(',')
     for n in asciiAry: m += chr(int(n))
     return m
 
+# uses hard-coded primes to generate RSA modulus (n),
+# encryption key (e), and decryption key (d)
+# returns a tuple containing n, e, d
 def genKeys():
     p, q = 10174093, 10176827
     n = p * q
+    # totient of n
     l = (p - 1) * (q - 1)
-    e = choosee(l)
-    d = modinv(e, l)
+    e, d = 0, 0
+    # coprime check
+    while (d == 0):
+        e = choosee(l)
+        d = modinv(e, l)
     return (n, e, d)
 
+# C = M^e mod n
 def encrypt(m, e, n):
     return pow(m, e, n)
 
+# M = C^d mod n
 def decrypt(c, d, n):
     return pow(c, d, n)
 
 # implementation of pow(b,e,m)
 # with binary exponentiation
-def f(x,e,m):
-    X = x
-    E = e
-    Y = 1
-    while E > 0:
-        if E % 2 == 0:
-            X = (X * X) % m
-            E = E/2
+# returns b^e mod m
+# b - base number
+# e - exponent
+# m - modulus
+def binexp(b, e, m):
+    y = 1
+    while e > 0:
+        if e % 2 == 0:
+            b = (b * b) % m
+            e = e/2
         else:
-            Y = (X * Y) % m
-            E = E - 1
-    return Y
+            y = (b * y) % m
+            e = e - 1
+    return y
 
 def main():
-    msg = 'Mathi'
+    msg = 'Math'
     m = toAscii(msg)
     n, e, d = genKeys()
     c = encrypt(m, e, n)
@@ -96,11 +117,12 @@ def main():
     p = decrypt(c, d, n)
     dm = toText(p)
 
-    print('Plaintext: ', msg)
-    print('Plaintext ASCII: ', str(m))
-    print('Ciphertext ASCII: ', str(c))
-    print('Ciphertext: ', cm)
-    print('Decrypted Plaintext ASCII: ', str(p))
-    print('Decrypted Plaintext: ', dm)
+    print()
+    print('{:<20}'.format('Plaintext: ' + '{:>20}'.format(msg)))
+    print('{:<20}'.format('Plaintext ASCII: ' + '{:>21}'.format(str(m))))
+    print('{:<20}'.format('Encrypted ASCII: ' + '{:>24}'.format(str(c))))
+    print('{:<20}'.format('Ciphertext: ' + '{:>20}'.format(cm)))
+    print('{:<20}'.format('Decrypted ASCII: ' + '{:>21}'.format(str(p))))
+    print('{:<20}'.format('Plaintext: ' + '{:>20}'.format(dm)))
 
 main()

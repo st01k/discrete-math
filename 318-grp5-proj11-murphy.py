@@ -24,9 +24,9 @@ def choosee(l):
     for i in range(1, l):
         # set high and low values
         low, high = srl - i, srl + i
-        # checks low range limit and tests co-primality
+        # checks low range limit and tests coprimality
         if low > 0 and coprime(l, low): return low
-        # checks high range limit and tests co-primality
+        # checks high range limit and tests coprimality
         if high < l and coprime(l, high): return high
     return 0
 
@@ -62,11 +62,6 @@ def egcd(a, b):
         # by reducing the problem each time in terms
         # of the remainder b / a or b mod a
         g, x, y = egcd(b % a, a)
-
-        # debug statement to see inputs and outputs (a,b | g,x,y)
-        if debug:
-            print('in: ' + str(a) + ' ' + str(b) + ' | out: ' + str(g) + ' ' + str(x) + ' ' + str(y))
-
         # general case (return gcd, x, y)
         return (g, y - (b // a) * x, x)
 
@@ -76,6 +71,7 @@ def main():
     # totient of n
     l = (p - 1) * (q - 1)
     e, d = 0, 0
+    # coprime check
     while (d == 0):
         e = choosee(l)
         d = modinv(e, l)
@@ -90,12 +86,4 @@ def main():
 
     print(s)
 
-    if debug:
-        x, y = 56, 15
-        print('------------------ Mod Inverse Test Case')
-        print('gcd, Bezout coefficients: ' + str(egcd(x, y)) + '\n')
-        print('d (mod inverse of e): ' + str(modinv(x, y)))
-
-# change to 1 for debug print statements
-debug = 1
 main()
