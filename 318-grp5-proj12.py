@@ -1,5 +1,5 @@
 # Casey Murphy
-# Group 5, Project 11
+# Group 5, Project 12
 # Discrete Mathematics
 # 7 Nov 17
 
@@ -118,16 +118,15 @@ def binexp(b, e, m):
 
 # returns formatted block of text based on input
 # s - list of integers
-# length - desired width of text block
-def formatList(s, length):
+def formatList(s):
     from textwrap import fill
     string = ''
     for c in s: string += str(c)
-    return fill(string, width = length, subsequent_indent = ' ')
+    return fill(string, width = 30, subsequent_indent = ' ')
 
 def main():
     n, e, d = genKeys()
-    msg = 'Math is awesome!'
+    msg = 'Math'
     # encodes message text to ascii
     amsg = toAscii(msg)
     # encrypts one character at a time
@@ -136,14 +135,12 @@ def main():
     plain = [decrypt(c, d, n) for c in cipher]
     # decodes decrypted message from ascii to text
     dmsg = toText(plain)
-    # for block size of output, 3 numbers per ascii code
-    width = len(amsg) * 3
 
     print()
     print('Plaintext: \n', msg)
-    print('Plaintext ASCII: \n', formatList(amsg, width))
-    print('Encrypted ASCII: \n', formatList(cipher, width))
-    print('Decrypted ASCII: \n', formatList(plain, width))
-    print('Decrypted Plaintext: \n', formatList(dmsg, width))
+    print('Plaintext ASCII: \n', formatList(amsg))
+    print('Encrypted ASCII: \n', formatList(cipher))
+    print('Decrypted ASCII: \n', formatList(plain))
+    print('Decrypted Plaintext: \n', formatList(dmsg))
 
 main()
