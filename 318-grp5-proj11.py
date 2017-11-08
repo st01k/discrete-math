@@ -19,15 +19,12 @@ def coprime(l, x):
 # a value that is coprime with l and within 1 - l
 # l - totient of RSA modulus
 def choosee(l):
-    # floor integer square root of l
-    srl = int(l ** (1/2))
-    for i in range(1, l):
-        # set high and low values
-        low, high = srl - i, srl + i
-        # checks low range limit and tests co-primality
-        if low > 0 and coprime(l, low): return low
-        # checks high range limit and tests co-primality
-        if high < l and coprime(l, high): return high
+    # srl = int(l ** (1/2))
+    for i in range(2, l - 1):
+        # low, high = srl - i, srl + i
+        # if low > 0 and coprime(l, low): return low
+        # if high < l and coprime(l, high): return high
+        if coprime(l, i): return i
     return 0
 
 # returns d (decryption key) | e(d) ≡ 1 mod l
@@ -71,7 +68,8 @@ def egcd(a, b):
         return (g, y - (b // a) * x, x)
 
 def main():
-    p, q = 10174093, 10176827
+    #p, q = 10174093, 10176827
+    p, q = 10175461, 10176827 # first original not prime
     n = p * q
     # totient of n
     l = (p - 1) * (q - 1)

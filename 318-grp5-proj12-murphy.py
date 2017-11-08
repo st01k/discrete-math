@@ -14,17 +14,17 @@ def gcd(a, b):
 def coprime(l, x):
     return gcd(l, x) == 1
 
-# returns encryption key (e) such that
+# returns random encryption key (e) such that
 # e is coprime with l and within 1 - l, exclusive
 # l - totient of RSA modulus
 def choosee(l):
-    # srl = int(l ** (1/2))
+    from random import shuffle
+    candidates = []
     for i in range(2, l - 1):
-        # low, high = srl - i, srl + i
-        # if low > 0 and coprime(l, low): return low
-        # if high < l and coprime(l, high): return high
-        if coprime(l, i): return i
-    return 0
+        if coprime(l, i): candidates.append(i)
+        if len(candidates) > 10: break
+    shuffle(candidates)
+    return candidates[0]
 
 # returns decryption key (d) | e(d) ≡ 1 mod l
 # finds modular inverse of e with respect to the totient (l)
@@ -49,22 +49,17 @@ def egcd(a, b):
 
 # returns ascii code of plaintext
 # takes a plaintext string and encodes it
-# into a continuous (no spaces) ascii sequence
+# into a list of ascii codes
 # plaintext - plain text message
 def toAscii(plaintext):
-    temp = ''
-    for c in plaintext:
-        n = ord(c)
-        if n < 100: temp += '0'
-        temp += str(n)
-    return int(temp)
+    return [ord(c) for c in plaintext]
 
 # returns plain text message from ascii
 # decodes ascii code into plaintext
 # asciicode - collection of ascii codes
 def toText(asciicode):
-    m, asciiAry = '', format(asciicode, ',').split(',')
-    for n in asciiAry: m += chr(int(n))
+    m = []
+    for n in asciicode: m += chr(int(n))
     return m
 
 # returns a tuple containing n, e, d
@@ -73,12 +68,8 @@ def toText(asciicode):
 #   e - encryption key
 #   d - decryption key
 def genKeys():
-    #p, q = 3, 7
-    #p, q = 18353, 80141
-    #p, q = 10174093, 10176827 # original 8 digits
-    p, q = 10175461, 10176827 # replaced p, original not prime
-    #p, q = 101741023, 101742617 # 9 digits
-    #p, q = 1017411377, 1017410291 # 10 digits
+    # replaced p, original not prime
+    p, q = 10175461, 10176827
     n = p * q
     # l = totient of n = phi = (p-1)*(q-1)
     l = (p - 1) * (q - 1)
@@ -111,31 +102,48 @@ def decrypt(c, d, n):
 def binexp(b, e, m):
     y = 1
     while e > 0:
+        # exponent is even
         if e % 2 == 0:
+            # square base, take the mod
             b = (b * b) % m
-            e = e/2
+            # divide exponent in half
+            e /= 2
+        # exponent is odd
         else:
+            # mod result of b * y until exponent is 1
             y = (b * y) % m
-            e = e - 1
+            # decrement exponent
+            e -= 1
     return y
 
+# returns formatted block of text based on input
+# s - list of integers
+# length - desired width of text block
+def formatList(s, length):
+    from textwrap import fill
+    string = ''
+    for c in s: string += str(c)
+    return fill(string, width = length, subsequent_indent = ' ')
+
 def main():
-    # NOTE: doesn't work with 5+ character messages
-    # not sure why; check larger p,q and ascii en/decoding
-    msg = 'Math'
-    m = toAscii(msg)
     n, e, d = genKeys()
-    c = encrypt(m, e, n)
-    cm = toText(c)
-    p = decrypt(c, d, n)
-    dm = toText(p)
+    msg = 'Math is awesome!'
+    # encodes message text to ascii
+    amsg = toAscii(msg)
+    # encrypts one character at a time
+    cipher = [encrypt(c, e, n) for c in amsg]
+    # decrypts one character at a time
+    plain = [decrypt(c, d, n) for c in cipher]
+    # decodes decrypted message from ascii to text
+    dmsg = toText(plain)
+    # for block size of output, 3 numbers per ascii code
+    width = len(amsg) * 3
 
     print()
-    print('{:<20}'.format('Plaintext: ' + '{:>20}'.format(msg)))
-    print('{:<20}'.format('Plaintext ASCII: ' + '{:>21}'.format(str(m))))
-    print('{:<20}'.format('Encrypted ASCII: ' + '{:>24}'.format(str(c))))
-    print('{:<20}'.format('Ciphertext: ' + '{:>20}'.format(cm)))
-    print('{:<20}'.format('Decrypted ASCII: ' + '{:>21}'.format(str(p))))
-    print('{:<20}'.format('Plaintext: ' + '{:>20}'.format(dm)))
+    print('Plaintext: \n', msg)
+    print('Plaintext ASCII: \n', formatList(amsg, width))
+    print('Encrypted ASCII: \n', formatList(cipher, width))
+    print('Decrypted ASCII: \n', formatList(plain, width))
+    print('Decrypted Plaintext: \n', formatList(dmsg, width))
 
 main()
