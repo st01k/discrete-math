@@ -1,8 +1,3 @@
-# Casey Murphy
-# Group 5, Project 3
-# Discrete Mathematics
-# 1 Sep 17
-
 import sys
 
 IMP = '-->'
